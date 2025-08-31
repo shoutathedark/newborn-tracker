@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 const User = require("../models/User");
 const router = express.Router();
-
+const isProd = process.env.NODE_ENV === "production";
 // Register
 router.post(
   "/register",
@@ -59,8 +59,6 @@ router.post(
         { expiresIn: "7d" }
       );
 
-      const isProd = process.env.NODE_ENV === "production";
-
       res.cookie("token", accessToken, { httpOnly: true, secure: isProd, sameSite: isProd ? "strict" : "lax" });
       res.cookie("refreshToken", refreshToken, { httpOnly: true, secure: isProd, sameSite: isProd ? "strict" : "lax" });
 
@@ -79,7 +77,7 @@ router.post("/refresh", async (req, res) => {
   try {
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
     const accessToken = jwt.sign({ id: decoded.id, email: decoded.email }, process.env.JWT_SECRET, { expiresIn: "15m" });
-    res.cookie("token", accessToken, { httpOnly: true, secure: true, sameSite: "strict" });
+    res.cookie("token", accessToken, { httpOnly: true, secure: isProd, sameSite: isProd ? "strict" : "lax" });
     res.json({ message: "Token refreshed" });
   } catch {
     res.status(403).json({ message: "Invalid refresh token" });

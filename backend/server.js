@@ -12,9 +12,12 @@ const logRoutes = require("./routes/logs");
 const app = express();
 connectDB();
 
+const isProd = process.env.NODE_ENV === "production";
+const FRONTEND_URL = isProd ? process.env.FRONTEND_PROD : process.env.FRONTEND_DEV;
+
 const corsOptions = {
-  origin: 'http://localhost:5173',  // Allow frontend to access this backend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allowed HTTP methods
+  origin: FRONTEND_URL, 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
   allowedHeaders: ['Content-Type', 'Authorization'], 
   credentials: true,
 };
