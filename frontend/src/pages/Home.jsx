@@ -1,43 +1,39 @@
 import { useEffect, useState, useContext } from "react";
-import axios from "../api/axiosConfig";
+import api from "../api/axiosConfig";
 import { AuthContext } from "../context/AuthContext";
-import { Link } from "react-router-dom";
 
-export default function Home() {
+const Home = () => {
+  const [babies, setBabies] = useState([]);
   const { user } = useContext(AuthContext);
-  const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    // Fetch rooms the logged-in user is part of
-    const fetchRooms = async () => {
+    const fetchBabies = async () => {
       try {
-        const res = await axios.get("/rooms");
-        setRooms(res.data);
+        const res = await api.get("/babies/get");
+        setBabies(res.data);
       } catch (err) {
-        console.error("Error fetching rooms:", err);
+        console.error("Failed to fetch babies:", err);
       }
     };
 
-    if (user) {
-      fetchRooms();
-    }
+    if (user) fetchBabies();
   }, [user]);
 
   return (
     <div>
-      <h2>Welcome, {user?.email}</h2>
-      <h3>Your Rooms:</h3>
-      <ul>
-        {rooms.length ? (
-          rooms.map((room) => (
-            <li key={room._id}>
-              <Link to={`/room/${room._id}`}>{room.name}</Link>
-            </li>
-          ))
-        ) : (
-          <p>You haven't joined any rooms yet.</p>
-        )}
-      </ul>
+      <h2>Welcome {user?.name}</h2>
+      <h3>Your Babies</h3>
+      {babies.length > 0 ? (
+        <ul>
+          {babies.map((baby) => (
+            <li key={baby._id}>{baby.name}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>No babies found</p>
+      )}
     </div>
   );
-}
+};
+
+export default Home;
