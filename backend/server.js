@@ -6,7 +6,7 @@ const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/auth");
-const roomRoutes = require("./routes/rooms");
+const babyRoutes = require("./routes/babies");
 const logRoutes = require("./routes/logs");
 
 const app = express();
@@ -39,8 +39,8 @@ app.use("/api/auth", authLimiter);
 
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/rooms", roomRoutes);
-app.use("/api/rooms", logRoutes);
+app.use("/api/babies", babyRoutes);
+app.use("/api/logs", logRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5001;

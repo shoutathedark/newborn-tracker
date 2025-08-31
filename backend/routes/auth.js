@@ -2,30 +2,38 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
-const User = require("../models/User");
+const Caregiver = require("../models/caregiver");
 const router = express.Router();
 const isProd = process.env.NODE_ENV === "production";
+
 // Register
 router.post(
   "/register",
   [
     body("name").notEmpty(),
-    body("email").isEmail(),
+    body("username").notEmpty(),
     body("password").isLength({ min: 6 }),
+    body("role").optional().isIn(["parent", "grandparent", "nanny", "other"])
   ],
   async (req, res) => {
-    console.log('Inside /register route');
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-    const { name, email, password } = req.body;
-    try {
-      let user = await User.findOne({ email });
-      if (user) return res.status(400).json({ message: "User already exists" });
+    const { name, username, password, role } = req.body;
 
-      user = new User({ name, email, password });
-      await user.save();
-      res.status(201).json({ message: "User registered" });
+    try {
+      let caregiver = await Caregiver.findOne({ username });
+      if (caregiver) return res.status(400).json({ message: "Username already taken" });
+
+      caregiver = new Caregiver({
+        name,
+        username,
+        role: role || "parent",
+        password
+      });
+
+      await caregiver.save();
+      res.status(201).json({ message: "Caregiver registered" });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
@@ -35,26 +43,27 @@ router.post(
 // Login
 router.post(
   "/login",
-  [body("email").isEmail(), body("password").exists()],
+  [body("username").notEmpty(), body("password").exists()],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
     const { email, password } = req.body;
     try {
-      const user = await User.findOne({ email });
-      if (!user) return res.status(400).json({ message: "Invalid credentials" });
+      const caregiver = await Caregiver.findOne({ username });
+      if (!caregiver) return res.status(400).json({ message: "Invalid credentials" });
 
-      const isMatch = await bcrypt.compare(password, user.password);
+      const isMatch = await bcrypt.compare(password, caregiver.password);
       if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
       const accessToken = jwt.sign(
-        { id: user._id, email, role: user.role, rooms: user.rooms },
+        { id: caregiver._id, username, role: caregiver.role },
         process.env.JWT_SECRET,
         { expiresIn: "15m" }
       );
+
       const refreshToken = jwt.sign(
-        { id: user._id, email },
+        { id: caregiver._id, username },
         process.env.JWT_REFRESH_SECRET,
         { expiresIn: "7d" }
       );
@@ -76,7 +85,11 @@ router.post("/refresh", async (req, res) => {
 
   try {
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-    const accessToken = jwt.sign({ id: decoded.id, email: decoded.email }, process.env.JWT_SECRET, { expiresIn: "15m" });
+    const accessToken = jwt.sign(
+      { id: decoded.id, email: decoded.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
+    );
     res.cookie("token", accessToken, { httpOnly: true, secure: isProd, sameSite: isProd ? "strict" : "lax" });
     res.json({ message: "Token refreshed" });
   } catch {
