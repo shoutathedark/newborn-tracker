@@ -22,6 +22,7 @@ const Login = () => {
     try {
       const res = await api.post("/auth/login", formData);
       setUser(res.data.user);
+      console.log(res);
       toast.success("Login successful!");
       navigate("/"); 
     } catch (err) {

@@ -107,7 +107,7 @@ router.post("/refresh", async (req, res) => {
     res.cookie("token", accessToken, { httpOnly: true, secure: isProd, sameSite: isProd ? "strict" : "lax" });
 
     res.json({
-      message: "Token refreshed",
+      //message: "Token refreshed",
       user: {
         id: caregiver._id,
         username: caregiver.username,
@@ -119,3 +119,5 @@ router.post("/refresh", async (req, res) => {
     res.status(403).json({ message: "Invalid refresh token" });
   }
 });
+
+module.exports = router;
