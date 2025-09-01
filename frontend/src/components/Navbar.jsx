@@ -6,8 +6,8 @@ const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
 
   return (
-    <nav style={{ padding: "1rem", background: "#eee" }}>
-      <Link to="/">Home</Link> |{" "}
+    <nav>
+      <Link to="/">Home</Link>{" "}
       {user ? (
         <>
           <span>Welcome, {user.name}</span>
@@ -17,7 +17,7 @@ const Navbar = () => {
         </>
       ) : (
         <>
-          <Link to="/login">Login</Link> |{" "}
+          <Link to="/login">Login</Link> {" "}
           <Link to="/register">Register</Link>
         </>
       )}

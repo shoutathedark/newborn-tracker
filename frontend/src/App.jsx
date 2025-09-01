@@ -4,7 +4,9 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
-import "./App.css"; // import global styles
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import "./App.css";
 
 const App = () => {
   return (
@@ -12,7 +14,7 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route
-          path="/"
+          path="/home"
           element={
             <ProtectedRoute>
               <Home />
@@ -22,6 +24,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
+      <ToastContainer />
     </Router>
   );
 };

@@ -17,32 +17,18 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #444;
-  color: #fff;
+  background: #020024;
+  background: linear-gradient(90deg,rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
   padding: 0.75rem 1.5rem;
 }
 
 nav a {
-  color: #fff;
+  color: #ffffff;
   text-decoration: none;
-  margin-right: 1rem;
 }
 
 nav a:hover {
   text-decoration: underline;
-}
-
-nav button {
-  background: #ff5252;
-  color: white;
-  border: none;
-  padding: 0.5rem 0.75rem;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-nav button:hover {
-  background: #e60000;
 }
 
 /* Forms */

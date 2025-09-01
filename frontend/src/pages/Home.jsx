@@ -10,7 +10,8 @@ const Home = () => {
     const fetchBabies = async () => {
       try {
         const res = await api.get("/babies/get");
-        setBabies(res.data);
+        console.log(res);
+        setBabies(res.data.babies);
       } catch (err) {
         console.error("Failed to fetch babies:", err);
       }

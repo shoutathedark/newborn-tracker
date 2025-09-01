@@ -33,7 +33,7 @@ router.post(
       });
 
       await caregiver.save();
-      res.status(201).json({ message: "Caregiver registered" });
+      res.status(201).json({ message: "Caregiver registered", name: name, role: role});
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
@@ -48,7 +48,7 @@ router.post(
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-    const { email, password } = req.body;
+    const { username, password } = req.body;
     try {
       const caregiver = await Caregiver.findOne({ username });
       if (!caregiver) return res.status(400).json({ message: "Invalid credentials" });
@@ -71,7 +71,16 @@ router.post(
       res.cookie("token", accessToken, { httpOnly: true, secure: isProd, sameSite: isProd ? "strict" : "lax" });
       res.cookie("refreshToken", refreshToken, { httpOnly: true, secure: isProd, sameSite: isProd ? "strict" : "lax" });
 
-      res.json({ message: "Logged in" });
+      // ✅ return user info (exclude password)
+      res.json({
+        message: "Logged in",
+        user: {
+          id: caregiver._id,
+          username: caregiver.username,
+          role: caregiver.role,
+          name: caregiver.name,
+        },
+      });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
@@ -85,16 +94,28 @@ router.post("/refresh", async (req, res) => {
 
   try {
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+    const caregiver = await Caregiver.findById(decoded.id).select("-password");
+    if (!caregiver) return res.status(404).json({ message: "User not found" });
+
     const accessToken = jwt.sign(
-      { id: decoded.id, email: decoded.email },
+      { id: caregiver._id, username: caregiver.username, role: caregiver.role },
       process.env.JWT_SECRET,
       { expiresIn: "15m" }
     );
+
     res.cookie("token", accessToken, { httpOnly: true, secure: isProd, sameSite: isProd ? "strict" : "lax" });
-    res.json({ message: "Token refreshed" });
+
+    res.json({
+      message: "Token refreshed",
+      user: {
+        id: caregiver._id,
+        username: caregiver.username,
+        role: caregiver.role,
+        name: caregiver.name,
+      },
+    });
   } catch {
     res.status(403).json({ message: "Invalid refresh token" });
   }
 });
-
-module.exports = router;

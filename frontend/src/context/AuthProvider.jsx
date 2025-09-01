@@ -1,3 +1,4 @@
+// src/context/AuthProvider.jsx
 import { useState, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
 import axios from "../api/axiosConfig";
@@ -18,8 +19,8 @@ const AuthProvider = ({ children }) => {
     refresh();
   }, []);
 
-  const login = async (email, password) => {
-    const res = await axios.post("/auth/login", { email, password });
+  const login = async (username, password) => {
+    const res = await axios.post("/auth/login", { username, password });
     setUser(res.data.user);
   };
 
@@ -34,7 +35,7 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, setUser, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
