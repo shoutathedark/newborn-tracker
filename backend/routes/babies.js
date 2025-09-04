@@ -43,7 +43,7 @@ router.get("/", auth, async (req, res) => {
   try {
     const babies = await Baby.find(
       { caregiverIds: req.user.id },
-      "name" // only return the "name" field
+      "name dob gender"
     );
     res.json(babies);
   } catch (err) {
