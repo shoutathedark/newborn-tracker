@@ -12,7 +12,6 @@ const Home = () => {
     const fetchBabies = async () => {
       try {
         const res = await api.get("/babies");
-        console.log(res);
         setBabies(res.data);
       } catch (err) {
         console.error("Failed to fetch babies:", err);
@@ -23,15 +22,25 @@ const Home = () => {
   }, [user]);
 
   return (
-    <div>
+    <div style={{ padding: "1rem" }}>
       <h2>Welcome {user?.name}</h2>
 
       <h3>Your Babies</h3>
       {babies.length > 0 ? (
-        <ul>
+        <ul style={{ listStyle: "none", padding: 0 }}>
           {babies.map((baby) => (
-            <li key={baby._id}>
-              {baby.name} — {baby.gender} —{" "}
+            <li
+              key={baby._id}
+              style={{
+                marginBottom: "0.5rem",
+                padding: "0.75rem",
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+                cursor: "pointer",
+              }}
+              onClick={() => navigate(`/logs/${baby._id}`)}
+            >
+              <strong>{baby.name}</strong> — {baby.gender} —{" "}
               {new Date(baby.dob).toLocaleDateString()}
             </li>
           ))}

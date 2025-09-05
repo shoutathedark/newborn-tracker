@@ -1,5 +1,5 @@
 const express = require("express");
-const { body, validationResult } = require("express-validator");
+const { body, param, validationResult } = require("express-validator");
 const Baby = require("../models/baby");
 const auth = require("../middleware/auth");
 
@@ -38,7 +38,7 @@ router.post(
   }
 );
 
-// Fetch all babies for logged-in caregiver (only return names)
+// Fetch all babies for logged-in caregiver (only return names, date of birth and gender)
 router.get("/", auth, async (req, res) => {
   try {
     const babies = await Baby.find(
@@ -50,5 +50,21 @@ router.get("/", auth, async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+// Fetch specific baby by ID, logged in user must be a caregiver
+router.get("/:babyId/", auth,[param("babyId").isMongoId()],handleValidationErrors, async(req,res)=>{
+      try {
+        const baby = await Baby.findById(req.params.babyId);
+        if (!baby) return res.status(404).json({ message: "Baby not found" });
+  
+        // Only caregivers of this baby can fetch this baby info
+        if (!baby.caregiverIds.includes(req.user.id))
+          return res.status(403).json({ message: "Access denied" });
+  
+        res.json(baby);
+      } catch (err) {
+        res.status(500).json({ message: err.message });
+      }
+})
 
 module.exports = router;

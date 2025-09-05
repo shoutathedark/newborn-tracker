@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import AddBaby from "./pages/AddBaby";
 import Register from "./pages/Register";
+import Logs from "./pages/Logs";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -29,6 +30,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <AddBaby />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/logs/:babyId"
+          element={
+            <ProtectedRoute>
+              <Logs />
             </ProtectedRoute>
           }
         />

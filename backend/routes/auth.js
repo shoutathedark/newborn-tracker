@@ -65,13 +65,21 @@ router.post(
       const refreshToken = jwt.sign(
         { id: caregiver._id, username },
         process.env.JWT_REFRESH_SECRET,
-        { expiresIn: "7d" }
+        { expiresIn: "1d" }
       );
 
-      res.cookie("token", accessToken, { httpOnly: true, secure: isProd, sameSite: isProd ? "strict" : "lax" });
-      res.cookie("refreshToken", refreshToken, { httpOnly: true, secure: isProd, sameSite: isProd ? "strict" : "lax" });
+      res.cookie("token", accessToken, {
+        httpOnly: true,
+        secure: isProd,
+        sameSite: isProd ? "strict" : "lax",
+        maxAge: 15 * 60 * 1000});
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: isProd,
+        sameSite: isProd ? "strict" : "lax",
+        maxAge: 24*60*60*1000 });
 
-      // ✅ return user info (exclude password)
+      // return user info (exclude password)
       res.json({
         message: "Logged in",
         user: {
@@ -104,10 +112,13 @@ router.post("/refresh", async (req, res) => {
       { expiresIn: "15m" }
     );
 
-    res.cookie("token", accessToken, { httpOnly: true, secure: isProd, sameSite: isProd ? "strict" : "lax" });
+    res.cookie("token", accessToken, {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "strict" : "lax",
+      maxAge: 15 * 60 * 1000});
 
     res.json({
-      //message: "Token refreshed",
       user: {
         id: caregiver._id,
         username: caregiver.username,
@@ -115,8 +126,8 @@ router.post("/refresh", async (req, res) => {
         name: caregiver.name,
       },
     });
-  } catch {
-    res.status(403).json({ message: "Invalid refresh token" });
+  } catch (err) {
+    res.status(403).json({ message: err.message });
   }
 });
 

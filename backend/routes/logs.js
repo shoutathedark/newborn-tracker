@@ -76,7 +76,7 @@ router.get(
       const events = await Event.find({ babyId: req.params.babyId }).populate("caregiverId", "name username role");
       res.json(events);
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      res.status(500).json({ message: "error fetching events" });
     }
   }
 );
