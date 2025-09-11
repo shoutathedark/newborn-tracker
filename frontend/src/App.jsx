@@ -15,7 +15,6 @@ const App = () => {
   return (
     <AuthProvider>
     <Router>
-      <Navbar />
       <Routes>
         <Route
           path="/"
@@ -45,6 +44,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
       </Routes>
       <ToastContainer />
+      <Navbar />
     </Router>
     </AuthProvider>
   );

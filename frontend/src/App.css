@@ -1,40 +1,57 @@
-/* Reset some defaults */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@import "tailwindcss";
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background-color: #f9f9f9;
   color: #333;
   line-height: 1.6;
+  background: linear-gradient(135deg, 
+#E8D5FF 0%,
+#D1FAE5 25%, 
+#DBEAFE 50%, 
+#FEE2E2 75%, 
+#FEF3C7 100%
+);
+  padding: 1rem;
+  min-height: 100vh;
+  padding-bottom: 4.5rem;
+}
+
+@media (min-width: 768px) {
+  body {
+    padding-bottom: 5.5rem;     /* matches md:h-20 navbar */
+  }
+}
+
+.pastel-gradient {
+background: linear-gradient(135deg, 
+#E8D5FF 0%,
+#D1FAE5 25%, 
+#DBEAFE 50%, 
+#FEE2E2 75%, 
+#FEF3C7 100%
+);
 }
 
 /* Navbar */
+
 nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+}
+
+.nav-items-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  background: #020024;
-  background: linear-gradient(90deg,rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
-  padding: 0.75rem 1.5rem;
-}
-
-nav a {
-  color: #ffffff;
-  text-decoration: none;
-}
-
-nav a:hover {
-  text-decoration: underline;
 }
 
 /* Forms */
 form {
   max-width: 400px;
-  margin: 2rem auto;
+  margin: 1rem auto;
   padding: 2rem;
   background: white;
   border-radius: 8px;
@@ -68,8 +85,61 @@ form button:hover {
   background: #0056b3;
 }
 
-/* Page Content */
-h1 {
-  text-align: center;
-  margin-top: 2rem;
+/* Size classes */
+
+
+/* Utility */
+.display-flex{
+  display:flex
+}
+
+.justify-content-space-between{
+  justify-content: space-between;
+}
+
+/* Buttons */
+.btn{
+  box-shadow: 0px 10px 14px -7px #276873;
+	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+	background-color:#599bb3;
+	border-radius:8px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:16px;
+	font-weight:bold;
+	padding:8px 16px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #3d768a;
+}
+
+.btn:hover {
+	background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+	background-color:#408c99;
+}
+.btn:active {
+	position:relative;
+	top:1px;
+}
+
+.clay-element {
+border-radius: 20px;
+box-shadow: var(--shadow-soft);
+transition: all 0.3s ease;
+}
+        
+.clay-element:hover {
+transform: translateY(-1px);
+box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.1), -6px -6px 12px rgba(255, 255, 255, 0.6);
+}
+        
+.clay-element-inset {
+border-radius: 16px;
+box-shadow: var(--shadow-soft-inset);
+}
+
+.clay-gentle {
+border-radius: 16px;
+box-shadow: var(--shadow-gentle);
 }

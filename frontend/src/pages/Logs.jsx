@@ -12,6 +12,7 @@ const Logs = () => {
   const [events, setEvents] = useState([]);
 
   // Form state
+  const [showPopup, setShowPopup] = useState(false);
   const [type, setType] = useState("feeding");
   const [amount, setAmount] = useState("");
   const [duration, setDuration] = useState("");
@@ -73,7 +74,9 @@ const Logs = () => {
 
     try {
       const res = await api.post(`/logs/${babyId}/events`, payload);
+      console.log(res);
       setEvents((prev) => [res.data, ...prev]);
+      toast.success("Event logged!")
       // reset form
       setAmount("");
       setDuration("");
@@ -82,18 +85,18 @@ const Logs = () => {
       setTimestamp(new Date().toISOString().slice(0, 16));
     } catch (err) {
       console.error("Failed to add event:", err);
+      toast.error("Error adding event.")
     }
   };
 
   return (
     <div style={{ padding: "1rem" }}>
-      <h2>{baby ? `${baby.name}'s Events` : "Loading..."}</h2>
+        <div className = "display-flex justify-content-space-between">
+            <h2>{baby ? `${baby.name}'s Events` : "Loading..."}</h2>
+            <button className = "btn" onClick={() => navigate("/")}>← Back to Home</button>
+        </div>
 
-      <button onClick={() => navigate("/")}>← Back to Home</button>
-
-      {/* Add new event form */}
-      <form onSubmit={handleAddEvent} style={{ margin: "1rem 0" }}>
-        {/* Event type dropdown */}
+      <form onSubmit={handleAddEvent}>
         <div style={{ marginBottom: "0.5rem" }}>
           <label>Event Type: </label>
           <select value={type} onChange={(e) => setType(e.target.value)}>
@@ -123,7 +126,6 @@ const Logs = () => {
               type="number"
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
-              required
             />
           </div>
         )}
@@ -171,7 +173,7 @@ const Logs = () => {
           />
         </div>
 
-        <button type="submit">Add Event</button>
+        <button className = "btn" type="submit">Add Event</button>
       </form>
 
       {/* Events list */}
@@ -222,7 +224,7 @@ const Logs = () => {
           </tbody>
         </table>
       ) : (
-        <p>No events yet</p>
+        <p>No events added yet</p>
       )}
     </div>
   );

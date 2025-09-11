@@ -17,23 +17,29 @@ const AddBaby = () => {
   };
 
   return (
-    <div>
+    <div style = {{padding:"1rem"}}>
       <h2>Add New Baby</h2>
       <form onSubmit={handleAddBaby}>
+        <label htmlFor = "name">Name:</label>
         <input
+          id = "name"
           type="text"
           placeholder="Name"
           value={newBaby.name}
           onChange={(e) => setNewBaby({ ...newBaby, name: e.target.value })}
           required
         />
+        <label htmlFor = "birthday">Birthday:</label>
         <input
+          id = "birthday"
           type="date"
           value={newBaby.dob}
           onChange={(e) => setNewBaby({ ...newBaby, dob: e.target.value })}
           required
         />
+        <label htmlFor = "gender">Gender:</label>
         <select
+          id = "gender"
           value={newBaby.gender}
           onChange={(e) => setNewBaby({ ...newBaby, gender: e.target.value })}
           required

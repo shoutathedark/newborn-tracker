@@ -51,7 +51,9 @@ router.post(
       });
 
       await event.save();
-      res.status(201).json(event);
+
+      const populatedEvent = await Event.findById(event._id).populate("caregiverId", "name");
+      res.status(201).json(populatedEvent);
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
@@ -73,7 +75,7 @@ router.get(
       if (!baby.caregiverIds.includes(req.user.id))
         return res.status(403).json({ message: "Access denied" });
 
-      const events = await Event.find({ babyId: req.params.babyId }).populate("caregiverId", "name username role");
+      const events = await Event.find({ babyId: req.params.babyId }).populate("caregiverId", "name");
       res.json(events);
     } catch (err) {
       res.status(500).json({ message: "error fetching events" });
