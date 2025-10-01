@@ -18,7 +18,8 @@ router.post(
   auth,
   [
     param("babyId").isMongoId(),
-    body("type").isIn(["feeding", "sleeping", "shower", "diaper", "milk_expression"]),
+    body("type").isIn(["feeding", "sleeping", "shower", "diaper"]),
+    body("subtype").isIn(["bottle", "breastfeeding_left", "breastfeeding_right", "breastfeeding_both"]),
     body("amount").optional().isNumeric(),
     body("duration").optional().isNumeric(),
     body("diaper").optional().custom(value => {
@@ -43,6 +44,7 @@ router.post(
         babyId: req.params.babyId,
         caregiverId: req.user.id,
         type: req.body.type,
+        subtype: req.body.subtype,
         amount: req.body.amount,
         duration: req.body.duration,
         diaper: req.body.diaper,
@@ -75,7 +77,54 @@ router.get(
       if (!baby.caregiverIds.includes(req.user.id))
         return res.status(403).json({ message: "Access denied" });
 
-      const events = await Event.find({ babyId: req.params.babyId }).populate("caregiverId", "name");
+      const isToday = req.query.isToday === "true";
+      let query = { babyId: req.params.babyId };
+
+      if (isToday) {
+        const now = new Date();
+
+        const start = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          0, 0, 0, 0
+        );
+
+        const end = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          23, 59, 59, 999
+        );
+        query.timestamp = { $gte: start, $lte: end };
+      }
+
+      const events = await Event.find(query).populate("caregiverId", "name").sort({timestamp: -1});
+
+      if (isToday) {
+        let feedings = 0;
+        let sleepingHours = 0;
+        let diapers = 0;
+
+        events.forEach((e) => {
+          if (e.type === "feeding") {
+            feedings++;
+          } else if (e.type === "sleeping" && e.duration) {
+            // assuming duration is stored in minutes
+            sleepingHours += e.duration / 60;
+          } else if (e.type === "diaper") {
+            diapers++;
+          }
+        });
+
+        const summary = {
+          feedings,
+          sleepingHours: parseFloat(sleepingHours.toFixed(1)), // round to 1 decimal
+          diapers,
+        };
+
+        return res.json({ events, summary });
+      }
       res.json(events);
     } catch (err) {
       res.status(500).json({ message: "error fetching events" });

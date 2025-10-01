@@ -4,13 +4,49 @@ import axios from "../api/axiosConfig";
 export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [babies, setBabies] = useState([]);
+  const [activeBaby, setActiveBaby] = useState(null);
+
+  // Fetch babies linked to user
+  useEffect(() => {
+    const fetchBabies = async () => {
+      try {
+        const res = await axios.get("/babies");
+        const babyList = res.data?.babies || res.data || [];
+        setBabies(babyList);
+
+        if (babyList.length > 0) {
+          const savedId = localStorage.getItem("activeBabyId");
+          const found = babyList.find((b) => b._id === savedId);
+          setActiveBaby(found || babyList[0] || null);
+
+          // update localStorage in case we default to first baby
+          localStorage.setItem(
+            "activeBabyId",
+            (found || babyList[0])._id
+          );
+        } else {
+          setActiveBaby(null);
+          localStorage.removeItem("activeBabyId");
+        }
+      } catch (err) {
+        console.error("Failed to fetch babies:", err);
+      }
+    };
+
+    if (user) fetchBabies();
+  }, [user]);
+
+  // Persist activeBabyId when switching
+  useEffect(() => {
+  if (activeBaby) {
+    localStorage.setItem("activeBabyId", activeBaby._id);
+  }
+}, [activeBaby]);
 
   // Try refresh token on mount
   useEffect(() => {
     const refresh = async () => {
-      const currentPath = window.location.pathname;
-
       try {
         const res = await axios.post("/auth/refresh");
         setUser(res.data.user);
@@ -19,9 +55,6 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
         localStorage.removeItem("user");
       }
-       finally{
-        setLoading(false);
-       }
     };
 
     refresh();
@@ -42,20 +75,16 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     await axios.post("/auth/logout");
     setUser(null);
+    setBabies([]);
+    setActiveBaby(null);
+    localStorage.removeItem("activeBabyId");
     localStorage.removeItem("user");
     window.location.href = "/login";
   };
 
-  if (loading) {
-    // 🔑 Don’t render routes yet → prevents flashing
-    return <div className="flex h-screen items-center justify-center">Loading...</div>;
-  }
-
   return (
-    <AuthContext.Provider value={{ user, setUser, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ user, setUser, login, register, logout, babies, setBabies, activeBaby, setActiveBaby }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-//export default AuthProvider;

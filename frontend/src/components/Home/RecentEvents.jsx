@@ -57,7 +57,7 @@ export default function RecentEvents({ events, isLoading }) {
         
         return (
           <div 
-            key={event.id} 
+            key={event._id} 
             className={`clay-element bg-gradient-to-r ${eventColors[event.type]} p-4`}
           >
             <div className="flex items-center gap-3">

@@ -6,8 +6,12 @@ const eventSchema = new Schema({
   caregiverId: { type: Schema.Types.ObjectId, ref: 'Caregiver', required: true },
   type: { 
     type: String, 
-    enum: ['feeding', 'sleeping', 'shower', 'diaper', 'milk_expression'], 
+    enum: ['feeding', 'sleeping', 'shower', 'diaper'], 
     required: true 
+  },
+  subtype:{
+    type: String,
+    enum: ['bottle', 'breastfeeding_left', 'breastfeeding_right', 'breastfeeding_both']
   },
   timestamp: { type: Date, default: Date.now },
   duration: { type: Number }, // in minutes, for sleeping

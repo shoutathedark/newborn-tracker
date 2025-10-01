@@ -38,12 +38,12 @@ router.post(
   }
 );
 
-// Fetch all babies for logged-in caregiver (only return names, date of birth and gender)
+// Fetch all babies for logged-in caregiver (only return id, names, date of birth and gender)
 router.get("/", auth, async (req, res) => {
   try {
     const babies = await Baby.find(
       { caregiverIds: req.user.id },
-      "name dob gender"
+      "id name dob gender"
     );
     res.json(babies);
   } catch (err) {

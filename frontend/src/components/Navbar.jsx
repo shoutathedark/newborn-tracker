@@ -3,15 +3,17 @@ import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
 import { LuHouse, LuPlus, LuClock, LuSettings } from "react-icons/lu";
 
-const navigationItems = [
-  { title: "Dashboard", url: "/", icon: LuHouse },
-  { title: "Add Event", url: "", icon: LuPlus },
-  { title: "Timeline", url: "", icon: LuClock },
-  { title: "Settings", url: "", icon: LuSettings },
-];
 
 const Navbar = () => {
   const location = useLocation();
+  const { activeBaby } = useContext(AuthContext);
+
+  const navigationItems = [
+  { title: "Dashboard", url: "/", icon: LuHouse },
+  { title: "Add Event", url: `/AddEvent/${activeBaby?._id}`, icon: LuPlus },
+  { title: "Timeline", url: `//timeline`, icon: LuClock },
+  { title: "Settings", url: "/settings", icon: LuSettings },
+  ];
 
   return (
     <nav className = "fixed bottom-0 left-0 right-0 z-50 p-4">

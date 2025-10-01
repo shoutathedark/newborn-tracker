@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+:root{
+  --clay-lavender: #E8D5FF;
+  --clay-lavender-dark: #D4BBFF;
+  --clay-mint: #D1FAE5;
+  --clay-mint-dark: #A7F3D0;
+  --clay-blue: #DBEAFE;
+  --clay-blue-dark: #BFDBFE;
+  --clay-peach: #FEE2E2;
+  --clay-peach-dark: #FECACA;
+  --clay-yellow: #FEF3C7;
+  --clay-yellow-dark: #FDE68A;
+  --clay-pink: #FCE7F3;
+  --clay-pink-dark: #F9A8D4;
+          
+  --shadow-soft: 6px 6px 12px rgba(0, 0, 0, 0.08), -4px -4px 8px rgba(255, 255, 255, 0.5);
+  --shadow-soft-inset: inset 3px 3px 6px rgba(0, 0, 0, 0.08), inset -3px -3px 6px rgba(255, 255, 255, 0.5);
+  --shadow-gentle: 3px 3px 8px rgba(0, 0, 0, 0.06), -2px -2px 6px rgba(255, 255, 255, 0.6);
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
   color: #333;
@@ -71,20 +90,6 @@ form input {
   border-radius: 4px;
 }
 
-form button {
-  width: 100%;
-  padding: 0.75rem;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-form button:hover {
-  background: #0056b3;
-}
-
 /* Size classes */
 
 
@@ -124,22 +129,39 @@ form button:hover {
 }
 
 .clay-element {
-border-radius: 20px;
-box-shadow: var(--shadow-soft);
-transition: all 0.3s ease;
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
+  transition: all 0.3s ease;
 }
         
 .clay-element:hover {
-transform: translateY(-1px);
-box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.1), -6px -6px 12px rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.1), -6px -6px 12px rgba(255, 255, 255, 0.6);
 }
         
 .clay-element-inset {
-border-radius: 16px;
-box-shadow: var(--shadow-soft-inset);
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft-inset);
 }
 
 .clay-gentle {
-border-radius: 16px;
-box-shadow: var(--shadow-gentle);
+  border-radius: 16px;
+  box-shadow: var(--shadow-gentle);
+}
+
+.clay-button {
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+  transition: all 0.2s ease;
+  border: none;
+}
+        
+.clay-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.6);
+}
+        
+.clay-button:active {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-soft-inset);
 }

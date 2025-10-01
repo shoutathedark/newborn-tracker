@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import AddBaby from "./pages/AddBaby";
 import Register from "./pages/Register";
-import Logs from "./pages/Logs";
+import Logs from "./pages/AddEvent";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -33,7 +33,7 @@ const App = () => {
           }
         />
         <Route
-          path="/logs/:babyId"
+          path="/AddEvent/:babyId"
           element={
             <ProtectedRoute>
               <Logs />
