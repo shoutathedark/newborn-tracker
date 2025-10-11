@@ -19,6 +19,31 @@
   --shadow-gentle: 3px 3px 8px rgba(0, 0, 0, 0.06), -2px -2px 6px rgba(255, 255, 255, 0.6);
 }
 
+.dark {
+  --clay-lavender: #4C1D95;
+  --clay-mint: #065F46;
+  --clay-blue: #1E3A8A;
+  --clay-peach: #7F1D1D;
+  --clay-yellow: #78350F;
+  --clay-pink: #831843;
+
+  --shadow-soft: 6px 6px 12px rgba(255, 255, 255, 0.08), -4px -4px 8px rgba(0, 0, 0, 0.5);
+  --shadow-soft-inset: inset 3px 3px 6px rgba(255, 255, 255, 0.08), inset -3px -3px 6px rgba(0, 0, 0, 0.5);
+  --shadow-gentle: 3px 3px 8px rgba(255, 255, 255, 0.06), -2px -2px 6px rgba(0, 0, 0, 0.6);
+
+  --bg-gradient: linear-gradient(
+    135deg,
+    #1E1B4B 0%,
+    #064E3B 25%,
+    #1E3A8A 50%,
+    #7F1D1D 75%,
+    #78350F 100%
+  );
+  --text-color: #e5e5e5;
+  --form-bg: #1f2937;
+  --border-color: #444;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
   color: #333;

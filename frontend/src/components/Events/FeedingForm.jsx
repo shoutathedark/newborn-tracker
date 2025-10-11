@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { LuMilk, LuCircleDot, LuTablets, LuClock } from "react-icons/lu";
+import { format } from 'date-fns-tz';
 
 const feedingTypes = [
   { value: 'bottle', label: 'Bottle', icon: LuMilk }, 
@@ -12,7 +13,7 @@ export default function FeedingForm({ onSubmit, isSubmitting }) {
   const [formData, setFormData] = useState({
     type: 'feeding',
     subtype: 'bottle',
-    timestamp: '',
+    timestamp: format(new Date(), "yyyy-MM-dd HH:mm:ss", { timeZone: "Asia/Singapore" }),
     amount: '',
     notes: ''
   });
@@ -53,7 +54,7 @@ export default function FeedingForm({ onSubmit, isSubmitting }) {
       </div>
 
       {/* Amount */}
-      {formData.type === 'bottle' && (
+      {formData.subtype === 'bottle' && (
         <div className="space-y-2">
           <label className="text-sm font-semibold text-gray-800">Amount (ml)</label>
           <input

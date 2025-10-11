@@ -19,12 +19,13 @@ router.post(
   [
     param("babyId").isMongoId(),
     body("type").isIn(["feeding", "sleeping", "shower", "diaper"]),
-    body("subtype").isIn(["bottle", "breastfeeding_left", "breastfeeding_right", "breastfeeding_both"]),
+    body("subtype").optional().isIn(["bottle", "breastfeeding_left", "breastfeeding_right", "breastfeeding_both"]),
     body("amount").optional().isNumeric(),
-    body("duration").optional().isNumeric(),
     body("diaper").optional().custom(value => {
       if (!value.type || !["pee", "poop", "mixed"].includes(value.type)) throw new Error("Invalid diaper type");
-      if (!value.consistency || !["soft", "firm", "runny", "watery"].includes(value.consistency)) throw new Error("Invalid diaper consistency");
+      if (["poop", "mixed"].includes(value.type)) {if (!value.consistency || !["soft", "firm", "runny", "watery"].includes(value.consistency)) {throw new Error("Invalid diaper consistency");
+    }
+  }
       return true;
     }),
     body("notes").optional().trim().escape().isLength({ max: 500 }),
@@ -46,7 +47,8 @@ router.post(
         type: req.body.type,
         subtype: req.body.subtype,
         amount: req.body.amount,
-        duration: req.body.duration,
+        sleep_start: req.body.sleep_start,
+        sleep_end: req.body.sleep_end,
         diaper: req.body.diaper,
         notes: req.body.notes,
         timestamp: req.body.timestamp || new Date()

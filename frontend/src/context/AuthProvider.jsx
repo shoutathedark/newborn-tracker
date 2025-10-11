@@ -16,18 +16,17 @@ export const AuthProvider = ({ children }) => {
         setBabies(babyList);
 
         if (babyList.length > 0) {
-          const savedId = localStorage.getItem("activeBabyId");
+          const savedId = sessionStorage.getItem("activeBabyId");
           const found = babyList.find((b) => b._id === savedId);
           setActiveBaby(found || babyList[0] || null);
 
-          // update localStorage in case we default to first baby
-          localStorage.setItem(
+          sessionStorage.setItem(
             "activeBabyId",
             (found || babyList[0])._id
           );
         } else {
           setActiveBaby(null);
-          localStorage.removeItem("activeBabyId");
+          sessionStorage.removeItem("activeBabyId");
         }
       } catch (err) {
         console.error("Failed to fetch babies:", err);
@@ -40,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   // Persist activeBabyId when switching
   useEffect(() => {
   if (activeBaby) {
-    localStorage.setItem("activeBabyId", activeBaby._id);
+    sessionStorage.setItem("activeBabyId", activeBaby._id);
   }
 }, [activeBaby]);
 
@@ -50,10 +49,11 @@ export const AuthProvider = ({ children }) => {
       try {
         const res = await axios.post("/auth/refresh");
         setUser(res.data.user);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+        sessionStorage.setItem("user", JSON.stringify(res.data.user));
       } catch {
         setUser(null);
-        localStorage.removeItem("user");
+        sessionStorage.removeItem("user");
+        //Need to navigate user to login page if not already there
       }
     };
 
@@ -63,13 +63,13 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     const res = await axios.post("/auth/login", { username, password });
     setUser(res.data.user);
-    localStorage.setItem("user", JSON.stringify(res.data.user));
+    sessionStorage.setItem("user", JSON.stringify(res.data.user));
   };
 
   const register = async (name, username, password) => {
     const res = await axios.post("/auth/register", { name, username, password });
     setUser(res.data.user);
-    localStorage.setItem("user", JSON.stringify(res.data.user));
+    sessionStorage.setItem("user", JSON.stringify(res.data.user));
   };
 
   const logout = async () => {
@@ -77,8 +77,8 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setBabies([]);
     setActiveBaby(null);
-    localStorage.removeItem("activeBabyId");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("activeBabyId");
+    sessionStorage.removeItem("user");
     window.location.href = "/login";
   };
 

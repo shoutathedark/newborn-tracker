@@ -14,8 +14,9 @@ const eventSchema = new Schema({
     enum: ['bottle', 'breastfeeding_left', 'breastfeeding_right', 'breastfeeding_both']
   },
   timestamp: { type: Date, default: Date.now },
-  duration: { type: Number }, // in minutes, for sleeping
-  amount: { type: Number }, // in ml, for feeding or milk_expression
+  sleep_start: { type: Date },
+  sleep_end: {type: Date},
+  amount: { type: Number },
   diaper: {
     type: {
       type: String,

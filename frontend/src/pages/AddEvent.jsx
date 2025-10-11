@@ -1,16 +1,16 @@
-import { useEffect, useState, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api/axiosConfig";
-import { format } from "date-fns-tz";
 import { toast } from "react-toastify";
 import { AuthContext } from "../context/AuthProvider";
 import { LuMoon, LuBaby ,LuArrowLeft } from "react-icons/lu";
 import { TbMilk } from "react-icons/tb";
 import FeedingForm from "../components/Events/FeedingForm";
+import SleepForm from "../components/Events/SleepingForm";
+import DiaperForm from "../components/Events/DiaperForm";
 
 const Logs = () => {
-  const { user, activeBaby, setActiveBaby } = useContext(AuthContext);
-  const [baby, setBaby] = useState(null);
+  const { activeBaby } = useContext(AuthContext);
   const [selectedType, setSelectedType] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -22,31 +22,16 @@ const Logs = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchBaby = async () => {
-      try {
-        const resBaby = await api.get(`/babies/${activeBaby._id}`);
-        setBaby(resBaby.data);
-
-      } catch (err) {
-        console.error("Failed to fetch events:", err);
-      }
-    };
-
-    fetchBaby();
-  }, [activeBaby]);
-
   const handleAddEvent = async (formData) => {
-    const { type, subtype, amount, duration, diaper, notes, timestamp } = formData;
+    const { type, subtype, amount, sleep_start, sleep_end, diaper, notes, timestamp } = formData;
 
     const errors = [];
     if (!type) errors.push("Event type is required");
 
     if (type === "feeding" && !amount && subtype ==='bottle') errors.push("Amount is required for feeding");
-    if (type === "sleeping" && !duration) errors.push("Duration is required for sleeping");
     if (type === "diaper") {
       if (!diaper?.type) errors.push("Diaper type is required");
-      if (!diaper?.consistency) errors.push("Diaper consistency is required");
+      if (!diaper?.consistency &&(diaper?.type ==='poop' || diaper?.type === 'mixed')) errors.push("Diaper consistency is required");
     }
 
     if (errors.length > 0) {
@@ -54,12 +39,10 @@ const Logs = () => {
       return;
     }
 
-    let payload = { subtype, type, notes, timestamp: timestamp };
+    let payload = { sleep_start, sleep_end, subtype, type, notes, timestamp: timestamp };
 
     if (type === "feeding") {
       payload.amount = Number(amount);
-    } else if (type === "sleeping") {
-      payload.duration = Number(duration);
     } else if (type === "diaper") {
       payload.diaper = {
         type: diaper?.type,
@@ -138,10 +121,17 @@ const Logs = () => {
         </div>
       ) : (
         /* Event Form */
-        <div className="clay-element bg-white/80 p-6">
+        <div>
           {selectedType === 'feeding' && (
             <FeedingForm onSubmit={handleAddEvent} isSubmitting={isSubmitting} />
           )}
+          {selectedType === 'sleeping' &&(
+            <SleepForm onSubmit={handleAddEvent} isSubmitting={isSubmitting}></SleepForm>
+          )}
+          {selectedType === 'diaper' &&(
+            <DiaperForm onSubmit={handleAddEvent} isSubmitting={isSubmitting}></DiaperForm>
+          )}
+          
         </div>
       )}
     </div>
