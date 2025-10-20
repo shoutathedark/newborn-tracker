@@ -54,6 +54,9 @@ export default function RecentEvents({ events, isLoading }) {
       {events.map((event) => {
         const Icon = eventIcons[event.type];
         const eventTime = format(new Date(event.timestamp), 'h:mm a');
+        const sleepStart = event.sleep_start ? format(new Date(event.sleep_start), 'h:mm a') : null;
+        const sleepEnd = event.sleep_end ? format(new Date(event.sleep_end), 'h:mm a') : null;
+
         
         return (
           <div 
@@ -70,7 +73,10 @@ export default function RecentEvents({ events, isLoading }) {
                   {event.type === 'feeding' && event.feeding_type && 
                     ` - ${event.feeding_type.replace('_', ' ')}`}
                 </p>
-                <p className="text-sm text-gray-700">{eventTime}</p>
+                <p className="text-sm text-gray-700">
+                  {event.type === 'sleeping'
+                  ? `${sleepStart || '-'} → ${sleepEnd || '-'}`
+                  : eventTime}</p>
               </div>
             </div>
           </div>

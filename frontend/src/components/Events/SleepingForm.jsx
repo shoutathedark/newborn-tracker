@@ -7,6 +7,7 @@ export default function SleepForm({ onSubmit, isSubmitting }) {
     type: 'sleeping',
     sleep_start: '',
     sleep_end: format(new Date(), "yyyy-MM-dd HH:mm", { timeZone: "Asia/Singapore" }),
+    timestamp: '',
     notes: ''
   });
 
@@ -37,7 +38,7 @@ export default function SleepForm({ onSubmit, isSubmitting }) {
           <input
             type="datetime-local"
             value={formData.sleep_start}
-            onChange={(e) => setFormData(prev => ({ ...prev, sleep_start: e.target.value }))}
+            onChange={(e) => setFormData(prev => ({ ...prev, sleep_start: e.target.value, timestamp: e.target.value }))}
             required
             className="clay-element-inset w-full p-4 bg-white border-none outline-none text-gray-800"
           />

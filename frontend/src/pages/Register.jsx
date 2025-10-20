@@ -23,7 +23,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const res = await api.post("/auth/register", formData);
+      const res = await api.post("/auth?action=register", formData);
       setUser(res.data.user); // log the user in automatically
       toast.success("Registration successful! Welcome 🎉");
       navigate("/"); // go straight home

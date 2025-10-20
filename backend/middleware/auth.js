@@ -1,4 +1,18 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
+
+export default async function auth(req, res) {
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ message: "Not authenticated" });
+
+    try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return decoded;
+  } catch {
+    return res.status(403).json({ message: "Invalid token"});
+  }
+}
+
+/*const jwt = require("jsonwebtoken");
 
 function auth(req, res, next) {
   
@@ -14,4 +28,4 @@ function auth(req, res, next) {
   }
 }
 
-module.exports = auth;
+module.exports = auth; */

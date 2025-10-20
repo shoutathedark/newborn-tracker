@@ -52,7 +52,7 @@ const Logs = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await api.post(`/logs/${activeBaby._id}/events`, payload);
+      const res = await api.post(`/logs?babyId=${activeBaby._id}`, payload);
       toast.success("Event logged!")
       navigate("/");
     } catch (err) {

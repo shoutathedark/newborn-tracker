@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LuMilk, LuCircleDot, LuTablets, LuClock } from "react-icons/lu";
+import { LuMilk, LuCircleDot, LuTablets } from "react-icons/lu";
 import { format } from 'date-fns-tz';
 
 const feedingTypes = [

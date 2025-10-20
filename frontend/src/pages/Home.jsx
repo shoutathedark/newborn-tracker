@@ -17,8 +17,8 @@ const Home = () => {
       if (!activeBaby) return;
       setIsLoading(true);
       try {
-        const res = await api.get(`/logs/${activeBaby._id}/events`,{
-          params: {isToday: true}
+        const res = await api.get(`/logs?babyId=${activeBaby._id}`,{
+          params: {isFetchSummary: true}
         });
 
         setEvents(res.data.events);

@@ -6,6 +6,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [babies, setBabies] = useState([]);
   const [activeBaby, setActiveBaby] = useState(null);
+  
 
   // Fetch babies linked to user
   useEffect(() => {
@@ -45,15 +46,18 @@ export const AuthProvider = ({ children }) => {
 
   // Try refresh token on mount
   useEffect(() => {
+    
     const refresh = async () => {
       try {
-        const res = await axios.post("/auth/refresh");
+        const res = await axios.post("/auth?action=refresh");
         setUser(res.data.user);
         sessionStorage.setItem("user", JSON.stringify(res.data.user));
       } catch {
         setUser(null);
         sessionStorage.removeItem("user");
-        //Need to navigate user to login page if not already there
+        if (window.location.pathname !== "/login"){
+        window.location.href = "/login";
+        }
       }
     };
 
@@ -61,19 +65,19 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (username, password) => {
-    const res = await axios.post("/auth/login", { username, password });
+    const res = await axios.post("/auth?action=login", { username, password });
     setUser(res.data.user);
     sessionStorage.setItem("user", JSON.stringify(res.data.user));
   };
 
   const register = async (name, username, password) => {
-    const res = await axios.post("/auth/register", { name, username, password });
+    const res = await axios.post("/auth?action=register", { name, username, password });
     setUser(res.data.user);
     sessionStorage.setItem("user", JSON.stringify(res.data.user));
   };
 
   const logout = async () => {
-    await axios.post("/auth/logout");
+    await axios.post("/auth?action=logout");
     setUser(null);
     setBabies([]);
     setActiveBaby(null);

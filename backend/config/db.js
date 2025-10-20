@@ -1,3 +1,23 @@
+import mongoose from "mongoose";
+
+let isConnected = false;
+
+const connectDB = async () => {
+  if (isConnected) return;
+  const uri = process.env.MONGO_URI;
+
+  const db = await mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+
+  isConnected = db.connections[0].readyState;
+  console.log("MongoDB connected");
+};
+
+export default connectDB;
+
+/*
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
@@ -11,3 +31,4 @@ const connectDB = async () => {
 };
 
 module.exports = connectDB;
+*/

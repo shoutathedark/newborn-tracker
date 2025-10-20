@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const babySchema = new Schema({
@@ -8,4 +8,5 @@ const babySchema = new Schema({
   caregiverIds: [{ type: Schema.Types.ObjectId, ref: 'Caregiver' }]
 }, { timestamps: true });
 
-module.exports = mongoose.model('Baby', babySchema);
+const Baby = mongoose.model.Baby || mongoose.model("Baby", babySchema);
+export default Baby;

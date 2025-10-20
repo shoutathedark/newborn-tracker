@@ -11,7 +11,7 @@ const Navbar = () => {
   const navigationItems = [
   { title: "Dashboard", url: "/", icon: LuHouse },
   { title: "Add Event", url: `/AddEvent/${activeBaby?._id}`, icon: LuPlus },
-  { title: "Timeline", url: `//timeline`, icon: LuClock },
+  { title: "Timeline", url: `/timeline`, icon: LuClock },
   { title: "Settings", url: "/settings", icon: LuSettings },
   ];
 

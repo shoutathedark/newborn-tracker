@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import AddBaby from "./pages/AddBaby";
 import Register from "./pages/Register";
+import Timeline from "./pages/TimeLine";
 import Logs from "./pages/AddEvent";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ToastContainer } from 'react-toastify';
@@ -12,6 +13,10 @@ import "./App.css";
 import {AuthProvider} from "./context/AuthProvider";
 
 const App = () => {
+
+  const hideNavbarPaths = ["/login", "/register"];
+  const shouldHideNavbar = hideNavbarPaths.includes(location.pathname);
+
   return (
     <AuthProvider>
     <Router>
@@ -37,6 +42,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Logs />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/Timeline"
+          element={
+            <ProtectedRoute>
+              <Timeline />
             </ProtectedRoute>
           }
         />
