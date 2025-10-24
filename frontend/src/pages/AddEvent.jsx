@@ -40,6 +40,7 @@ const Logs = () => {
     }
 
     let payload = { sleep_start, sleep_end, subtype, type, notes, timestamp: timestamp };
+    console.log(payload.sleep_start);
 
     if (type === "feeding") {
       payload.amount = Number(amount);

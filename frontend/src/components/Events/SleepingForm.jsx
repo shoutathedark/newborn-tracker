@@ -13,6 +13,7 @@ export default function SleepForm({ onSubmit, isSubmitting }) {
 
   const toUTCISOString = (localString) => {
     if (!localString) return null;
+    console.log(localString);
 
     const parsed = parse(localString, "yyyy-MM-dd HH:mm", new Date());
     const utcDate = fromZonedTime(parsed, "Asia/Singapore");
