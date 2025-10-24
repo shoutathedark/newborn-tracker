@@ -20,7 +20,7 @@ export default function FeedingForm({ onSubmit, isSubmitting }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const submitData = { ...formData, timestamp: fromZonedTime(formData.timestamp, "Asia/Singapore")};
+    const submitData = { ...formData, timestamp: fromZonedTime(new Date(formData.timestamp), "Asia/Singapore")};
     if (submitData.amount) {
       submitData.amount = parseFloat(submitData.amount);
     }

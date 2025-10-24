@@ -14,9 +14,9 @@ export default function SleepForm({ onSubmit, isSubmitting }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const submitData = {...formData,
-      sleep_start: fromZonedTime(formData.sleep_start, "Asia/Singapore"),
-      sleep_end: fromZonedTime(formData.sleep_end, "Asia/Singapore"),
-      timestamp: fromZonedTime(formData.timestamp, "Asia/Singapore")
+      sleep_start: fromZonedTime(new Date(formData.sleep_start), "Asia/Singapore"),
+      sleep_end: fromZonedTime(new Date(formData.sleep_end), "Asia/Singapore"),
+      timestamp: fromZonedTime(new Date(formData.timestamp), "Asia/Singapore")
     }
     onSubmit(submitData);
   };
