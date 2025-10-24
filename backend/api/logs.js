@@ -86,7 +86,7 @@ export default async function handler(req, res) {
         return res.status(403).json({ message: "Access denied" });
       const toUTCISOString = (localString) => {
           if (!localString) return null;
-          return utcDate = formatInTimeZone(localString, "America/Danmarkshavn");
+          return utcDate = formatInTimeZone(localString, "-8");
         };
       const event = new Event({
         babyId,
