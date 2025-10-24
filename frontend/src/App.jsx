@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import AddBaby from "./pages/AddBaby";
 import Register from "./pages/Register";
-import Timeline from "./pages/TimeLine";
+import Timeline from "./pages/Timeline";
 import Logs from "./pages/AddEvent";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ToastContainer } from 'react-toastify';
