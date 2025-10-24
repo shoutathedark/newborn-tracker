@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { LuMilk, LuCircleDot, LuTablets } from "react-icons/lu";
-import { format, formatInTimeZone } from 'date-fns-tz';
+import { format } from 'date-fns-tz';
 
 const feedingTypes = [
   { value: 'bottle', label: 'Bottle', icon: LuMilk }, 
@@ -17,17 +17,10 @@ export default function FeedingForm({ onSubmit, isSubmitting }) {
     amount: '',
     notes: ''
   });
-  const toUTCISOString = (localString) => {
-    if (!localString) return null;
-
-    
-    const utcDate = formatInTimeZone(localString, "America/Danmarkshavn");
-    return utcDate.toISOString(); 
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const submitData = { ...formData, timestamp: toUTCISOString(formData.timestamp)};
+    const submitData = { ...formData};
     if (submitData.amount) {
       submitData.amount = parseFloat(submitData.amount);
     }

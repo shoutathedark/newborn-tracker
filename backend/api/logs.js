@@ -4,6 +4,7 @@ import Baby from "../models/baby.js";
 import auth from "../middleware/auth.js";
 import Caregiver from "../models/caregiver.js";
 import { validationResult, body, param } from "express-validator";
+import { formatInTimeZone } from 'date-fns-tz';
 
 function validateRequest(req, res, validations) {
   const errors = [];
@@ -53,7 +54,7 @@ export default async function handler(req, res) {
   const bodyData = await parseJSONBody(req);
   if (bodyData === null) return res.status(400).json({ message: "Invalid JSON" });
 
-  // POST: Add an event
+  // POST: Add an event TO ADD BACKEND CONVERSION OF DATES HERE ASSUMING IT IS SENT IN LOCAL TIME
   if (req.method === "POST") {
     const valid = validateRequest(req, res, [
       param("babyId").isMongoId(),
@@ -83,18 +84,21 @@ export default async function handler(req, res) {
 
       if (!baby.caregiverIds.includes(user.id))
         return res.status(403).json({ message: "Access denied" });
-
+      const toUTCISOString = (localString) => {
+          if (!localString) return null;
+          return utcDate = formatInTimeZone(localString, "America/Danmarkshavn");
+        };
       const event = new Event({
         babyId,
         caregiverId: user.id,
         type: req.body.type,
         subtype: req.body.subtype,
         amount: req.body.amount,
-        sleep_start: req.body.sleep_start,
-        sleep_end: req.body.sleep_end,
+        sleep_start: toUTCISOString(req.body.sleep_start),
+        sleep_end: toUTCISOString(req.body.sleep_end),
         diaper: req.body.diaper,
         notes: req.body.notes,
-        timestamp: req.body.timestamp || new Date(),
+        timestamp: toUTCISOString(req.body.timestamp) || new Date(),
       });
 
       await event.save();
