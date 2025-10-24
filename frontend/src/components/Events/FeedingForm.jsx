@@ -20,8 +20,8 @@ export default function FeedingForm({ onSubmit, isSubmitting }) {
   const toUTCISOString = (localString) => {
     if (!localString) return null;
 
-    const parsed = parse(localString, "yyyy-MM-dd HH:mm", new Date());
-    const utcDate = formatInTimeZone(parsed, "America/Danmarkshavn");
+    
+    const utcDate = formatInTimeZone(localString, "America/Danmarkshavn");
     return utcDate.toISOString(); 
   };
 
