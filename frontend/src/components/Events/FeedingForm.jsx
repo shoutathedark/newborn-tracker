@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { LuMilk, LuCircleDot, LuTablets } from "react-icons/lu";
-import { format } from 'date-fns-tz';
+import { format, fromZonedTime } from 'date-fns-tz';
 
 const feedingTypes = [
   { value: 'bottle', label: 'Bottle', icon: LuMilk }, 
@@ -20,7 +20,7 @@ export default function FeedingForm({ onSubmit, isSubmitting }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const submitData = { ...formData };
+    const submitData = { ...formData, timestamp: fromZonedTime(formData.timestamp, "Asia/Singapore")};
     if (submitData.amount) {
       submitData.amount = parseFloat(submitData.amount);
     }

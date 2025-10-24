@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { LuClock } from "react-icons/lu";
-import { format } from 'date-fns-tz';
+import { format, fromZonedTime } from 'date-fns-tz';
 
 export default function SleepForm({ onSubmit, isSubmitting }) {
   const [formData, setFormData] = useState({
@@ -13,7 +13,12 @@ export default function SleepForm({ onSubmit, isSubmitting }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    const submitData = {...formData,
+      sleep_start: fromZonedTime(formData.sleep_start, "Asia/Singapore"),
+      sleep_end: fromZonedTime(formData.sleep_end, "Asia/Singapore"),
+      timestamp: fromZonedTime(formData.timestamp, "Asia/Singapore")
+    }
+    onSubmit(submitData);
   };
 
   const calculateDuration = () => {
