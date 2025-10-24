@@ -11,12 +11,20 @@ export default function SleepForm({ onSubmit, isSubmitting }) {
     notes: ''
   });
 
+  const toUTCISOString = (localString) => {
+    if (!localString) return null;
+
+    const parsed = parse(localString, "yyyy-MM-dd HH:mm", new Date());
+    const utcDate = fromZonedTime(parsed, "Asia/Singapore");
+    return utcDate.toISOString(); 
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const submitData = {...formData,
-      sleep_start: fromZonedTime(new Date(formData.sleep_start), "Asia/Singapore"),
-      sleep_end: fromZonedTime(new Date(formData.sleep_end), "Asia/Singapore"),
-      timestamp: fromZonedTime(new Date(formData.timestamp), "Asia/Singapore")
+      sleep_start: toUTCISOString(formData.sleep_start),
+      sleep_end: toUTCISOString(formData.sleep_end),
+      timestamp: toUTCISOString(formData.timestamp)
     }
     onSubmit(submitData);
   };

@@ -17,10 +17,17 @@ export default function FeedingForm({ onSubmit, isSubmitting }) {
     amount: '',
     notes: ''
   });
+  const toUTCISOString = (localString) => {
+    if (!localString) return null;
+
+    const parsed = parse(localString, "yyyy-MM-dd HH:mm", new Date());
+    const utcDate = fromZonedTime(parsed, "Asia/Singapore");
+    return utcDate.toISOString(); 
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const submitData = { ...formData, timestamp: fromZonedTime(new Date(formData.timestamp), "Asia/Singapore")};
+    const submitData = { ...formData, timestamp: toUTCISOString(formData.timestamp)};
     if (submitData.amount) {
       submitData.amount = parseFloat(submitData.amount);
     }
