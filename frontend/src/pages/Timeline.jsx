@@ -10,7 +10,7 @@ import EventItem from "../components/Timeline/EventItem";
 import FilterButtons from "../components/Timeline/FilterButtons";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function Timeline() {
+const Timeline = () => {
   const { activeBaby } = useContext(AuthContext);
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
@@ -240,3 +240,5 @@ export default function Timeline() {
     </div>
   );
 }
+
+export default Timeline;
