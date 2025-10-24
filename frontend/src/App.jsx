@@ -13,10 +13,6 @@ import "./App.css";
 import {AuthProvider} from "./context/AuthProvider";
 
 const App = () => {
-
-  const hideNavbarPaths = ["/login", "/register"];
-  const shouldHideNavbar = hideNavbarPaths.includes(location.pathname);
-
   return (
     <AuthProvider>
     <Router>
