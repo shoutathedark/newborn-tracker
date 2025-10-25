@@ -28,13 +28,13 @@ export default function SleepForm({ onSubmit, isSubmitting }) {
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault();
     const payload = {
     ...formData,
     sleep_start: toUTC(formData.sleep_start),
     sleep_end: toUTC(formData.sleep_end),
     timestamp: toUTC(formData.sleep_start)
   };
-    e.preventDefault();
     onSubmit(payload);
   };
 

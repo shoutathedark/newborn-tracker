@@ -13,14 +13,30 @@ export default function FeedingForm({ onSubmit, isSubmitting }) {
   const [formData, setFormData] = useState({
     type: 'feeding',
     subtype: 'bottle',
-    timestamp: format(new Date(), "yyyy-MM-dd HH:mm:ss", { timeZone: "Asia/Singapore" }),
+    timestamp: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss", { timeZone: "Asia/Singapore" }),
     amount: '',
     notes: ''
   });
 
+  const toUTC = (localDateTimeStr) => {
+    if (!localDateTimeStr) return null;
+
+    // Ensure 'T' separator exists (datetime-local always uses 'T')
+    const normalized = localDateTimeStr.replace(' ', 'T');
+
+    // Parse manually (don't use new Date(), which depends on system TZ)
+    const [datePart, timePart] = normalized.split('T');
+    const [year, month, day] = datePart.split('-').map(Number);
+    const [hour, minute] = timePart.split(':').map(Number);
+
+    // Construct the UTC ms for that local SGT time
+    const msUtc = Date.UTC(year, month - 1, day, hour - 8, minute); // hardcode -8h
+    return new Date(msUtc).toISOString();
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const submitData = { ...formData};
+    const submitData = { ...formData, timestamp: toUTC(formData.timestamp)};
     if (submitData.amount) {
       submitData.amount = parseFloat(submitData.amount);
     }
