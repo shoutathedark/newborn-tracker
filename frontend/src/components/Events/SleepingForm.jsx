@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { LuClock } from "react-icons/lu";
-import { format } from 'date-fns-tz';
+import { format, formatInTimeZone } from 'date-fns-tz';
 
 export default function SleepForm({ onSubmit, isSubmitting }) {
   const [formData, setFormData] = useState({
@@ -11,9 +11,20 @@ export default function SleepForm({ onSubmit, isSubmitting }) {
     notes: ''
   });
 
+  const toUTC = (localDateTime) => {
+    const date = new Date(localDateTime);
+    return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
+  };
+
   const handleSubmit = (e) => {
+    const payload = {
+    ...formData,
+    sleep_start: toUTC(formData.sleep_start),
+    sleep_end: toUTC(formData.sleep_end),
+    timestamp: toUTC(formData.sleep_start)
+  };
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit(payload);
   };
 
   const calculateDuration = () => {

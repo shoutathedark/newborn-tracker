@@ -4,7 +4,6 @@ import Baby from "../models/baby.js";
 import auth from "../middleware/auth.js";
 import Caregiver from "../models/caregiver.js";
 import { validationResult, body, param } from "express-validator";
-import { fromZonedTime } from 'date-fns-tz';
 
 function validateRequest(req, res, validations) {
   const errors = [];
@@ -84,21 +83,18 @@ export default async function handler(req, res) {
 
       if (!baby.caregiverIds.includes(user.id))
         return res.status(403).json({ message: "Access denied" });
-      const toUTCISOString = (localString) => {
-          if (!localString) return null;
-          return utcDate = fromZonedTime(localString, "Asia/Singapore");
-        };
+
       const event = new Event({
         babyId,
         caregiverId: user.id,
         type: req.body.type,
         subtype: req.body.subtype,
         amount: req.body.amount,
-        sleep_start: toUTCISOString(req.body.sleep_start),
-        sleep_end: toUTCISOString(req.body.sleep_end),
+        sleep_start: req.body.sleep_start,
+        sleep_end: req.body.sleep_end,
         diaper: req.body.diaper,
         notes: req.body.notes,
-        timestamp: toUTCISOString(req.body.timestamp) || new Date(),
+        timestamp: req.body.timestamp || new Date(),
       });
 
       await event.save();
