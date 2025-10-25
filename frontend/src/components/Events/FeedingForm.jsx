@@ -21,8 +21,7 @@ export default function FeedingForm({ onSubmit, isSubmitting }) {
   const toUTC = (localDateTimeStr) => {
     if (!localDateTimeStr) return null;
     const localDate = new Date(localDateTimeStr);
-    console.log(localDate.toISOString());
-    return utcdate = localDate.toISOString();
+    return localDate.toISOString();
   };
 
   const handleSubmit = (e) => {
