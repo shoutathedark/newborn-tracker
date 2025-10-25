@@ -11,9 +11,18 @@ export default function SleepForm({ onSubmit, isSubmitting }) {
     notes: ''
   });
 
-  const toUTC = (localDateTime) => {
-    const date = new Date(localDateTime);
-    return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
+  const toUTC = (localDateTimeStr) => {
+    // Accepts "YYYY-MM-DDTHH:mm" or "YYYY-MM-DD HH:mm"
+    const m = localDateTimeStr.match(/^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})$/);
+    if (!m) throw new Error('Invalid datetime format: ' + localDateTimeStr);
+
+    const [, y, mo, d, h, min] = m.map(Number);
+    // Construct milliseconds since epoch for the *local SGT time*, then convert to UTC by subtracting 8 hours.
+    // Use Date.UTC to avoid environment-local parsing differences.
+    const msForSgtLocal = Date.UTC(y, mo - 1, d, h, min, 0, 0); // this gives the UTC ms for the same Y/M/D/H/MIN values
+    // Because Date.UTC treats those fields as UTC, we need to subtract 8 hours to get the true UTC moment
+    const msUtc = msForSgtLocal - 8 * 60 * 60 * 1000;
+    return new Date(msUtc).toISOString(); // e.g. "2025-10-24T23:33:00.000Z"
   };
 
   const handleSubmit = (e) => {
