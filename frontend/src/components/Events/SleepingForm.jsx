@@ -6,23 +6,25 @@ export default function SleepForm({ onSubmit, isSubmitting }) {
   const [formData, setFormData] = useState({
     type: 'sleeping',
     sleep_start: '',
-    sleep_end: format(new Date(), "yyyy-MM-dd HH:mm", { timeZone: "Asia/Singapore" }),
+    sleep_end: format(new Date(), "yyyy-MM-dd'T'HH:mm", { timeZone: "Asia/Singapore" }),
     timestamp: '',
     notes: ''
   });
 
   const toUTC = (localDateTimeStr) => {
-    // Accepts "YYYY-MM-DDTHH:mm" or "YYYY-MM-DD HH:mm"
-    const m = localDateTimeStr.match(/^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})$/);
-    if (!m) throw new Error('Invalid datetime format: ' + localDateTimeStr);
+    if (!localDateTimeStr) return null;
 
-    const [, y, mo, d, h, min] = m.map(Number);
-    // Construct milliseconds since epoch for the *local SGT time*, then convert to UTC by subtracting 8 hours.
-    // Use Date.UTC to avoid environment-local parsing differences.
-    const msForSgtLocal = Date.UTC(y, mo - 1, d, h, min, 0, 0); // this gives the UTC ms for the same Y/M/D/H/MIN values
-    // Because Date.UTC treats those fields as UTC, we need to subtract 8 hours to get the true UTC moment
-    const msUtc = msForSgtLocal - 8 * 60 * 60 * 1000;
-    return new Date(msUtc).toISOString(); // e.g. "2025-10-24T23:33:00.000Z"
+    // Ensure 'T' separator exists (datetime-local always uses 'T')
+    const normalized = localDateTimeStr.replace(' ', 'T');
+
+    // Parse manually (don't use new Date(), which depends on system TZ)
+    const [datePart, timePart] = normalized.split('T');
+    const [year, month, day] = datePart.split('-').map(Number);
+    const [hour, minute] = timePart.split(':').map(Number);
+
+    // Construct the UTC ms for that local SGT time
+    const msUtc = Date.UTC(year, month - 1, day, hour - 8, minute); // hardcode -8h
+    return new Date(msUtc).toISOString();
   };
 
   const handleSubmit = (e) => {
