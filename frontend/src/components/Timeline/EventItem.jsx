@@ -21,7 +21,7 @@ const eventIconColors = {
 
 export default function EventItem({ event }) {
   const Icon = eventIcons[event.type];
-  const eventTime = format(new Date(event.timestamp), 'h:mm a');
+  const eventTime = format(new Date(event.timestamp), 'h:mm a', { timeZone: "Asia/Singapore" });
 
   const renderDetails = () => {
     switch (event.type) {

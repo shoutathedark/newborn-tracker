@@ -54,8 +54,8 @@ export default function RecentEvents({ events, isLoading }) {
       {events.map((event) => {
         const Icon = eventIcons[event.type];
         const eventTime = format(new Date(event.timestamp), 'h:mm a');
-        const sleepStart = event.sleep_start ? format(new Date(event.sleep_start), 'h:mm a') : null;
-        const sleepEnd = event.sleep_end ? format(new Date(event.sleep_end), 'h:mm a') : null;
+        const sleepStart = event.sleep_start ? format(new Date(event.sleep_start), 'h:mm a', { timeZone: "Asia/Singapore" }) : null;
+        const sleepEnd = event.sleep_end ? format(new Date(event.sleep_end), 'h:mm a', { timeZone: "Asia/Singapore" }) : null;
 
         
         return (

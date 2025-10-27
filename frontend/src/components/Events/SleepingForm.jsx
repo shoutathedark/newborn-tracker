@@ -13,18 +13,8 @@ export default function SleepForm({ onSubmit, isSubmitting }) {
 
   const toUTC = (localDateTimeStr) => {
     if (!localDateTimeStr) return null;
-
-    // Ensure 'T' separator exists (datetime-local always uses 'T')
-    const normalized = localDateTimeStr.replace(' ', 'T');
-
-    // Parse manually (don't use new Date(), which depends on system TZ)
-    const [datePart, timePart] = normalized.split('T');
-    const [year, month, day] = datePart.split('-').map(Number);
-    const [hour, minute] = timePart.split(':').map(Number);
-
-    // Construct the UTC ms for that local SGT time
-    const msUtc = Date.UTC(year, month - 1, day, hour - 8, minute); // hardcode -8h
-    return new Date(msUtc).toISOString();
+    const localDate = new Date(localDateTimeStr);
+    return localDate.toISOString();
   };
 
   const handleSubmit = (e) => {

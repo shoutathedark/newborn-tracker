@@ -98,18 +98,6 @@ const Login = () => {
             />
           </div>
 
-          {/* Remember me */}
-          <div className="flex items-center mb-8">
-            <input
-              id="remember"
-              type="checkbox"
-              className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-            />
-            <label htmlFor="remember" className="ml-2 text-sm text-gray-600">
-              Remember me
-            </label>
-          </div>
-
           {/* Sign in button */}
           <button
             type="submit"
