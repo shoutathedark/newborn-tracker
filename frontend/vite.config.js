@@ -63,11 +63,26 @@ export default defineConfig({
       "src": "icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      src: 'icons/apple-touch-icon.png',
+      sizes: '512x512',
+      type: 'image/png',
+      purpose: 'any maskable',
     }
   ],
         start_url: '/',
         display: 'standalone',
+        theme_color: '#a855f7',
         background_color: '#ffffff',
+      },
+       includeAssets: [
+        'icons/apple-touch-icon.png',
+        'favicon.ico',
+        'robots.txt',
+      ],
+            workbox: {
+        cleanupOutdatedCaches: true,
       },
     }),
   ],
