@@ -6,6 +6,7 @@ import AddBaby from "./pages/AddBaby";
 import Register from "./pages/Register";
 import Timeline from "./pages/Timeline";
 import Logs from "./pages/AddEvent";
+import SettingsPage from "./pages/Settings";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -51,6 +52,11 @@ const App = () => {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/settings" element={
+            <ProtectedRoute>
+              <SettingsPage />
+            </ProtectedRoute>
+          } />
       </Routes>
       <ToastContainer />
       <Navbar />

@@ -74,6 +74,7 @@ const Home = () => {
   return (
     /*Welcome section, Missing baby switcher*/
     <div className = "space-y-6 py-4">
+      <h2 className="text-2xl font-bold text-gray-800">Welcome back, {user?.name}!</h2>
       <div className = "clay-element bg-gradient-to-br from-pink-100 via-purple-50 to-blue-100 p-6">
       <div className="flex justify-center">
         {babies.length > 1 ?(
@@ -91,7 +92,6 @@ const Home = () => {
       )}
     </div>
         <div className="text-center mt-4">
-          <h2 className="text-sm font-medium text-gray-700">Welcome back, {user?.name}!</h2>
           <div className="space-y-2 mt-4">
             <div className="flex items-center justify-center gap-2 text-gray-600">
               <LuCalendarMinus2 className="w-4 h-4"/>

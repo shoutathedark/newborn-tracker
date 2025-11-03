@@ -188,8 +188,8 @@ export default async function handler(req, res) {
           value: accessToken,
           options: {
             httpOnly: true,
-            secure: isProd,
-            sameSite: isProd ? "strict" : "lax",
+            secure: true,
+            sameSite: none,
             maxAge: 15 * 60 * 1000,
             path: "/",
           },
