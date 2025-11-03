@@ -129,8 +129,8 @@ export default async function handler(req, res) {
           value: accessToken,
           options: {
             httpOnly: true,
-            secure: isProd,
-            sameSite: isProd ? "strict" : "lax",
+            secure: true,
+            sameSite: "none",
             maxAge: 15 * 60 * 1000,
             path: "/",
           },
@@ -140,8 +140,8 @@ export default async function handler(req, res) {
           value: refreshToken,
           options: {
             httpOnly: true,
-            secure: isProd,
-            sameSite: isProd ? "strict" : "lax",
+            secure: true,
+            sameSite: "none",
             maxAge: 24 * 60 * 60 * 1000,
             path: "/",
           },
@@ -189,7 +189,7 @@ export default async function handler(req, res) {
           options: {
             httpOnly: true,
             secure: true,
-            sameSite: none,
+            sameSite: "none",
             maxAge: 15 * 60 * 1000,
             path: "/",
           },
