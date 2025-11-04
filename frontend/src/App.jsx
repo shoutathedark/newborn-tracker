@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import PullToRefresh from "pulltorefreshjs";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -14,6 +16,25 @@ import "./App.css";
 import {AuthProvider} from "./context/AuthProvider";
 
 const App = () => {
+    useEffect(() => {
+    PullToRefresh.init({
+      mainElement: "body",
+      onRefresh() {
+        window.location.reload();
+      },
+      instructionsPullToRefresh: "Pull down to refresh",
+      instructionsReleaseToRefresh: "Release to refresh",
+      instructionsRefreshing: "Refreshing...",
+      iconArrow: "↓",
+      iconRefreshing: "⟳",
+      shouldPullToRefresh: () => window.scrollY === 0,
+      distThreshold: 60,
+    });
+
+    return () => {
+      PullToRefresh.destroyAll();
+    };
+  }, []);
   return (
     <AuthProvider>
     <Router>
