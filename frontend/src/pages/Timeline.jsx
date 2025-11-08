@@ -29,7 +29,7 @@ const Timeline = () => {
     setIsLoading(true);
     try {
       const res = await api.get(`/logs?babyId=${activeBaby._id}`, {
-        params: { date: selectedDate },
+        params: { date: selectedDate, t: Date.now()},
       });
       setEvents(res.data || []);
     } catch (error) {
