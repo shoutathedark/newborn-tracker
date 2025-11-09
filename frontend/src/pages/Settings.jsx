@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import api from "../api/axiosConfig";
+import axios from "../api/axiosConfig";
 import { LuArrowLeft } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 
@@ -14,7 +14,7 @@ const SettingsPage = () =>  {
     name: "",
     oldPassword: "",
     newPassword: "",
-  });
+  }); 
 
   const [babyForm, setBabyForm] = useState({
     name: "",
@@ -30,8 +30,7 @@ const handleBack = () => {
 
 
   useEffect(() => {
-    api.get("/user/action=profile").then((res) => setUser(res.data));
-    api.get("/baby").then((res) => setBabies(res.data));
+    axios.get("/user?action=profile").then((res) => setUser(res.data));
   }, []);
 
   const handleSaveUser = async () => {
@@ -70,7 +69,7 @@ const handleBack = () => {
         <h2 className="text-lg font-semibold mb-4 text-gray-700">User Profile</h2>
         <div className="space-y-1 text-gray-600">
           <p><span className="font-medium">Name:</span> {user.name}</p>
-          <p><span className="font-medium">Email:</span> {user.email}</p>
+          <p><span className="font-medium">Username:</span> {user.username}</p>
         </div>
         <button
           onClick={() => {

@@ -59,7 +59,7 @@ export default async function handler(req, res) {
     const username = user.username;
 
 
-  if (method === "GET" && req.query.action === "profile") {
+  if (req.method === "GET" && req.query.action === "profile") {
     try {
       const caregiver = await Caregiver.findOne({ username }).select(
         "-password -__v"
@@ -74,7 +74,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ message: "Server error" });
     }
   }
-  else if (method === "POST" && req.query.action === "update") {
+  else if (req.method === "POST" && req.query.action === "update") {
         const valid = validateRequest(req, res, [
           body("name").notEmpty(),
           body("oldPassword").notEmpty(),
